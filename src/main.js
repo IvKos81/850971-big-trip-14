@@ -10,7 +10,13 @@ import {createEventEditFormTemplate} from './view/event-edit.js';
 import {createEventAddNewNoDestinationTemplate} from './view/event-add-new-nodestination.js';
 import {createEventAddNewNoOffersTemplate} from './view/even-add-new-nooffer.js';
 
-const NUMBER_OF_ITEMS = 3;
+import {generateMockRoutePoint} from './mock/mock.js';
+
+const NUMBER_OF_ROUTE_POINTS = 15;
+
+const points = new Array(NUMBER_OF_ROUTE_POINTS).fill().map(() => {return generateMockRoutePoint();});
+
+//console.log(points); временно для проверки
 
 // функция для рендера элементов страницы;
 
@@ -49,14 +55,16 @@ render(tripEvents, createTripSortTemplate(), 'beforeend');
 render(tripEvents, createTripEventsListTemplate(), 'beforeend');
 
 const tripList = tripEvents.querySelector('.trip-events__list');
-for (let i = 0; i < NUMBER_OF_ITEMS; i++) {
-  render(tripList, createTripEventsItemTemplate(), 'beforeend');
+
+for (let i=0; i<points.length; i++) {
+
+  if (i!==0) {
+    render(tripList, createTripEventsItemTemplate(points[i]), 'beforeend');
+  } else {
+    render(tripList, createEventAddNewFormTemplate(points[i]), 'afterbegin');
+  }
+
 }
-
-//отрисовка формы создания пункта поездки;
-
-render(tripList, createEventAddNewFormTemplate(), 'afterbegin');
-
 
 //отрисовка формы редактирования пункта поездки;
 
@@ -67,6 +75,17 @@ render(tripList, createEventEditFormTemplate(), 'beforeend');
 
 render(tripList, createEventAddNewNoDestinationTemplate(), 'beforeend');
 
-//отрисовка формы создания пункта поездки без вариантов;
+//отрисовка формы создания пункта поездки без офферов;
 
 render(tripList, createEventAddNewNoOffersTemplate(), 'beforeend');
+
+// кнопка добавить пункт назначения;
+
+// const buttonAddNewPoint = document.querySelector('.trip-main__event-add-btn');
+// buttonAddNewPoint.addEventListener('click',() => {
+
+//   //отрисовка формы создания пункта поездки;
+//   render(tripList, createEventAddNewFormTemplate(), 'afterbegin');
+//   buttonAddNewPoint.setAttribute('disabled','disabled');
+
+// });
