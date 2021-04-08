@@ -10,8 +10,7 @@ import {createEventAddNewFormTemplate} from './view/event-add-new.js';
 // import {createEventAddNewNoDestinationTemplate} from './view/event-add-new-nodestination.js';
 // import {createEventAddNewNoOffersTemplate} from './view/even-add-new-nooffer.js';
 import {generateMockRoutePoint} from './mock/mock.js';
-import {generateFilterEverything, generateFilterPast, generateFilterFuture} from './mock/filter.js'
-import {generateMockRoutePoint} from './mock/mock.js';
+import {generateFilterEverything, generateFilterPast, generateFilterFuture} from './mock/filter.js';
 
 const NUMBER_OF_ROUTE_POINTS = 15;
 
