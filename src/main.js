@@ -11,6 +11,7 @@ import {createEventAddNewFormTemplate} from './view/event-add-new.js';
 // import {createEventAddNewNoOffersTemplate} from './view/even-add-new-nooffer.js';
 import {generateMockRoutePoint} from './mock/mock.js';
 import {generateFilterEverything, generateFilterPast, generateFilterFuture} from './mock/filter.js'
+import {generateMockRoutePoint} from './mock/mock.js';
 
 const NUMBER_OF_ROUTE_POINTS = 15;
 
@@ -71,7 +72,6 @@ for (let i=0; i<points.length; i++) {
 // //отрисовка формы редактирования пункта поездки;
 
 // render(tripList, createEventEditFormTemplate(), 'beforeend');
-
 
 // //отрисовка формы создания пункта поездки без пункта назначения;
 
