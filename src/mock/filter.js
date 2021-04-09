@@ -10,7 +10,7 @@ const generateFilterEverything = (tasks) => {
 const generateFilterPast = (tasks) => {
   let countIsFinished = 0;
   for (let i=0; i<tasks.length; i++) {
-    if (tasks[i].isFinished === true) {
+    if (tasks[i].isFinished) {
       countIsFinished++;
     }
   }
@@ -21,7 +21,7 @@ const generateFilterPast = (tasks) => {
 const generateFilterFuture = (tasks) => {
   let countInFuture = 0;
   for (let i=0; i<tasks.length; i++) {
-    if (tasks[i].inFuture === true) {
+    if (tasks[i].inFuture) {
       countInFuture++;
     }
   }

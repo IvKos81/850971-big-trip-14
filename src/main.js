@@ -14,7 +14,7 @@ import {generateFilterEverything, generateFilterPast, generateFilterFuture} from
 
 const NUMBER_OF_ROUTE_POINTS = 15;
 
-const points = new Array(NUMBER_OF_ROUTE_POINTS).fill().map(() => {return generateMockRoutePoint();});
+const points = new Array(NUMBER_OF_ROUTE_POINTS).fill().map(() => generateMockRoutePoint());
 
 const everythingFilter = generateFilterEverything(points);
 const futureFilter = generateFilterFuture(points);
