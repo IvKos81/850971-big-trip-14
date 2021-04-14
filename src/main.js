@@ -1,92 +1,93 @@
-import {createTripInfoTemplate} from './view/trip-info.js';
-import {createTripInfoCostTemplate} from './view/trip-info-cost.js';
-import {createTripNavigationTemplate} from './view/trip-navigation.js';
-import {createTripFiltersTemplate} from './view/trip-filters.js';
-import {createTripSortTemplate} from './view/trip-sort.js';
-import {createTripEventsListTemplate} from './view/trip-events-list.js';
-import {createTripEventsItemTemplate} from './view/trip-events-item.js';
-import {createEventAddNewFormTemplate} from './view/event-add-new.js';
-// import {createEventEditFormTemplate} from './view/event-edit.js';
-// import {createEventAddNewNoDestinationTemplate} from './view/event-add-new-nodestination.js';
-// import {createEventAddNewNoOffersTemplate} from './view/even-add-new-nooffer.js';
+import {RenderPosition} from './mock/data.js';
+import {renderElement} from './mock/utils.js';
+
+import {NUMBER_OF_ROUTE_POINTS} from './mock/mockdata.js';
 import {generateMockRoutePoint} from './mock/mock.js';
 import {generateFilterEverything, generateFilterPast, generateFilterFuture} from './mock/filter.js';
 
-const NUMBER_OF_ROUTE_POINTS = 15;
+import TripInfoView from './view/trip-info.js';
+import TripPriceView from './view/trip-info-cost.js';
+import TripNavigationView from './view/trip-navigation.js';
+import FiltersView from './view/trip-filters.js';
+import SortView from './view/trip-sort.js';
+import TripEventListView from './view/trip-events-list.js';
+import TripEventView from './view/trip-events-item.js';
+import TripEventEditView from './view/event-edit.js';
+
+// генерация моковых точек маршрута
 
 const points = new Array(NUMBER_OF_ROUTE_POINTS).fill().map(() => generateMockRoutePoint());
+
+//генерация данных для моковых фильтров
 
 const everythingFilter = generateFilterEverything(points);
 const futureFilter = generateFilterFuture(points);
 const pastFilter = generateFilterPast(points);
 
-// функция для рендера элементов страницы;
-
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-const tripMain = document.querySelector('.trip-main');
-
 // отрисовка инфо;
 
-render(tripMain, createTripInfoTemplate(), 'afterbegin');
+const tripMain = document.querySelector('.trip-main');
+renderElement(tripMain, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
 
 // отрисовка цены;
 
 const tripInfo = tripMain.querySelector('.trip-main__trip-info');
-render(tripInfo, createTripInfoCostTemplate(), 'beforeend');
+renderElement(tripInfo, new TripPriceView().getElement(), RenderPosition.BEFOREEND);
+
 
 //отрисовка меню;
 
 const tripNavigation = tripMain.querySelector('.trip-controls__navigation');
-render(tripNavigation, createTripNavigationTemplate(), 'beforeend');
+renderElement(tripNavigation, new TripNavigationView().getElement(), RenderPosition.BEFOREEND);
+
 
 // отрисовка фильтров;
 
 const tripFilters = tripMain.querySelector('.trip-controls__filters');
-render(tripFilters, createTripFiltersTemplate(everythingFilter, futureFilter, pastFilter), 'beforeend');
+renderElement(tripFilters, new FiltersView(everythingFilter, futureFilter, pastFilter).getElement(), RenderPosition.BEFOREEND);
 
 //отрисовка сортировки;
 
 const tripEvents = document.querySelector('.trip-events');
-render(tripEvents, createTripSortTemplate(), 'beforeend');
+renderElement(tripEvents, new SortView().getElement(), RenderPosition.BEFOREEND);
 
-//отрисовка пунктов поездки;
+//отрисовка контейнера списка для пунктов поездки
 
-render(tripEvents, createTripEventsListTemplate(), 'beforeend');
+const tripEventsListComponent = new TripEventListView();
+renderElement(tripEvents, tripEventsListComponent.getElement(), RenderPosition.BEFOREEND);
 
-const tripList = tripEvents.querySelector('.trip-events__list');
+// функция для отрисовка пунктов поездки;
+
+const renderTripEventItem = (tripListElement, point) => {
+
+  const tripEventComponent = new TripEventView(point);
+  const tripEventEditComponent = new TripEventEditView(point);
+
+  // замена пункта поездки на форму для редактирования
+
+  const tripPointToForm = () => {
+    tripListElement.replaceChild(tripEventEditComponent.getElement(), tripEventComponent.getElement());
+  };
+
+  const formToTripPoint = () => {
+    tripListElement.replaceChild( tripEventComponent.getElement(), tripEventEditComponent.getElement());
+  };
+
+  tripEventComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    tripPointToForm();
+  });
+
+  tripEventEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    formToTripPoint();
+  });
+
+  renderElement (tripListElement, tripEventComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+// отрисовка пунктов поездки
 
 for (let i=0; i<points.length; i++) {
-
-  if (i!==0) {
-    render(tripList, createTripEventsItemTemplate(points[i]), 'beforeend');
-  } else {
-    render(tripList, createEventAddNewFormTemplate(points[i]), 'afterbegin');
-  }
-
+  renderTripEventItem(tripEventsListComponent.getElement(), points[i]);
 }
-
-// //отрисовка формы редактирования пункта поездки;
-
-// render(tripList, createEventEditFormTemplate(), 'beforeend');
-
-// //отрисовка формы создания пункта поездки без пункта назначения;
-
-// render(tripList, createEventAddNewNoDestinationTemplate(), 'beforeend');
-
-// //отрисовка формы создания пункта поездки без офферов;
-
-// render(tripList, createEventAddNewNoOffersTemplate(), 'beforeend');
-
-// кнопка добавить пункт назначения;
-
-// const buttonAddNewPoint = document.querySelector('.trip-main__event-add-btn');
-// buttonAddNewPoint.addEventListener('click',() => {
-
-//   //отрисовка формы создания пункта поездки;
-//   render(tripList, createEventAddNewFormTemplate(), 'afterbegin');
-//   buttonAddNewPoint.setAttribute('disabled','disabled');
-
-// });

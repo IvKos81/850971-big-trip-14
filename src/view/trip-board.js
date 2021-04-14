@@ -1,17 +1,16 @@
 import {createElement} from '../mock/utils.js';
 
-const createTripInfoCostTemplate = () => {
-  return `<p class="trip-info__cost">
-  Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-</p>`;
+const createTripBoardTemplate = () => {
+  return `<section class='trip-events'>
+  </section>`;
 };
 
-export default class TripPrice {
+export default class TripBoard {
   constructor() {
     this._element = null;
   }
   getTemplate() {
-    return createTripInfoCostTemplate();
+    return createTripBoardTemplate();
   }
   getElement() {
     if (!this._element) {
@@ -23,5 +22,3 @@ export default class TripPrice {
     this._element = null;
   }
 }
-
-
