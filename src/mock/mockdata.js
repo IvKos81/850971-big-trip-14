@@ -1,3 +1,5 @@
+const NUMBER_OF_ROUTE_POINTS = 15;
+
 const mockOffers = [
   {
     type: 'taxi',
@@ -133,4 +135,4 @@ const mockOffers = [
   },
 ];
 
-export {mockOffers};
+export {mockOffers, NUMBER_OF_ROUTE_POINTS};

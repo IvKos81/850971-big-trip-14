@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import dayjs from 'dayjs';
+import {createElement} from '../mock/utils.js';
 // оригинальный код
 
 // const createTripEventsItemTemplate = () => {
@@ -99,4 +100,21 @@ const createTripEventsItemTemplate = (point) => {
 </li>`;
 };
 
-export {createTripEventsItemTemplate};
+export default class TripEvent {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+  getTemplate() {
+    return createTripEventsItemTemplate(this._point);
+  }
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
