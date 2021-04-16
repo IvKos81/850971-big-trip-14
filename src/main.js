@@ -69,8 +69,9 @@ const renderTripEventItem = (tripListElement, point) => {
   const onEscDown = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      formToTripPoint();}
-    document.removeEventListener('keydown', onEscDown);
+      formToTripPoint();
+      document.removeEventListener('keydown', onEscDown);
+    }
   };
 
   const onArrowButtonClick = (evt) => {
@@ -109,7 +110,7 @@ const renderTripEventItem = (tripListElement, point) => {
 
 const tripEvents = document.querySelector('.trip-events');
 
-if (points.length === 0) {renderElement(tripEvents, new NoEventMessageView().getElement(), RenderPosition.   AFTERBEGIN);
+if (points.length === 0) {renderElement(tripEvents, new NoEventMessageView().getElement(), RenderPosition.AFTERBEGIN);
 } else {
 
   //отрисовка сортировки;
