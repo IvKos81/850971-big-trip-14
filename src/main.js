@@ -1,5 +1,5 @@
 import {RenderPosition} from './mock/data.js';
-import {renderElement} from './mock/utils.js';
+import {renderElement, replace} from './mock/render.js';
 
 import {NUMBER_OF_ROUTE_POINTS} from './mock/mockdata.js';
 import {generateMockRoutePoint} from './mock/mock.js';
@@ -28,24 +28,24 @@ const pastFilter = generateFilterPast(points);
 // отрисовка инфо;
 
 const tripMain = document.querySelector('.trip-main');
-renderElement(tripMain, new TripInfoView().getElement(), RenderPosition.AFTERBEGIN);
+renderElement(tripMain, new TripInfoView(), RenderPosition.AFTERBEGIN);
 
 // отрисовка цены;
 
 const tripInfo = tripMain.querySelector('.trip-main__trip-info');
-renderElement(tripInfo, new TripPriceView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripInfo, new TripPriceView(), RenderPosition.BEFOREEND);
 
 
 //отрисовка меню;
 
 const tripNavigation = tripMain.querySelector('.trip-controls__navigation');
-renderElement(tripNavigation, new TripNavigationView().getElement(), RenderPosition.BEFOREEND);
+renderElement(tripNavigation, new TripNavigationView(), RenderPosition.BEFOREEND);
 
 
 // отрисовка фильтров;
 
 const tripFilters = tripMain.querySelector('.trip-controls__filters');
-renderElement(tripFilters, new FiltersView(everythingFilter, futureFilter, pastFilter).getElement(), RenderPosition.BEFOREEND);
+renderElement(tripFilters, new FiltersView(everythingFilter, futureFilter, pastFilter), RenderPosition.BEFOREEND);
 
 // функция для отрисовка пунктов поездки;
 
@@ -57,11 +57,11 @@ const renderTripEventItem = (tripListElement, point) => {
   // функции для замены пункта поездки на форму для редактирования
 
   const tripPointToForm = () => {
-    tripListElement.replaceChild(tripEventEditComponent.getElement(), tripEventComponent.getElement());
+    replace(tripEventEditComponent, tripEventComponent);
   };
 
   const formToTripPoint = () => {
-    tripListElement.replaceChild( tripEventComponent.getElement(), tripEventEditComponent.getElement());
+    replace( tripEventComponent, tripEventEditComponent);
   };
 
   // обработчики событий
@@ -74,58 +74,57 @@ const renderTripEventItem = (tripListElement, point) => {
     }
   };
 
-  const onArrowButtonClick = (evt) => {
-    evt.preventDefault();
-    formToTripPoint();
-    document.removeEventListener('keydown', onEscDown);
-  };
-
   // замена пункта поездки на форму для редактирования по клику
 
-  tripEventComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-    evt.preventDefault();
+  tripEventComponent.setEditClickHandler(() => {
     tripPointToForm();
     document.addEventListener('keydown', onEscDown);
   });
 
   // замена формы для редактирования на пункт поездки по Save
 
-  tripEventEditComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  tripEventEditComponent.setFormSubmitHandler(() => {
     formToTripPoint();
     document.removeEventListener('keydown', onEscDown);
   });
 
   // замена формы для редактирования на пункт поездки по Esc
 
-  tripEventEditComponent.getElement().querySelector('form').addEventListener('keydown', onEscDown);
+  tripEventEditComponent.setOnEscKeyDownHandler(() => {
+    formToTripPoint();
+    document.removeEventListener('keydown', onEscDown);
+  });
 
   // замена формы для редактирования на пункт поездки по клику на стрелку
 
-  tripEventEditComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', onArrowButtonClick);
+  tripEventEditComponent.setClickHandler(() => {
+    formToTripPoint();
+    document.removeEventListener('keydown', onEscDown);
+  });
 
-  renderElement (tripListElement, tripEventComponent.getElement(), RenderPosition.BEFOREEND);
+  renderElement (tripListElement, tripEventComponent, RenderPosition.BEFOREEND);
 };
 
+// отрисовка сообщения, если нет пунктов поездки
 
 const tripEvents = document.querySelector('.trip-events');
 
-if (points.length === 0) {renderElement(tripEvents, new NoEventMessageView().getElement(), RenderPosition.AFTERBEGIN);
+if (points.length === 0) {renderElement(tripEvents, new NoEventMessageView(), RenderPosition.AFTERBEGIN);
 } else {
 
   //отрисовка сортировки;
 
-  renderElement(tripEvents, new SortView().getElement(), RenderPosition.BEFOREEND);
+  renderElement(tripEvents, new SortView(), RenderPosition.BEFOREEND);
 
   //отрисовка контейнера списка для пунктов поездки
 
   const tripEventsListComponent = new TripEventListView();
-  renderElement(tripEvents, tripEventsListComponent.getElement(), RenderPosition.BEFOREEND);
+  renderElement(tripEvents, tripEventsListComponent, RenderPosition.BEFOREEND);
 
   // отрисовка пунктов поездки
 
   for (let i=0; i<points.length; i++) {
-    renderTripEventItem(tripEventsListComponent.getElement(), points[i]);
+    renderTripEventItem(tripEventsListComponent, points[i]);
   }
 }
 

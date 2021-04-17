@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils.js';
+import AbstractView from '../mock/abstract.js';
 
 const createTripNavigationTemplate = () => {
   return `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -7,20 +7,8 @@ const createTripNavigationTemplate = () => {
 </nav>`;
 };
 
-export default class TripNavigation {
-  constructor() {
-    this._element = null;
-  }
+export default class TripNavigation extends AbstractView {
   getTemplate() {
     return createTripNavigationTemplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

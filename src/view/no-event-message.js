@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils.js';
+import AbstractView from '../mock/abstract.js';
 
 const createTripNoEventsMessageTemplate = () => {
   return `<div class='trip-events__msg>
@@ -6,20 +6,8 @@ const createTripNoEventsMessageTemplate = () => {
   </div>`;
 };
 
-export default class NoEventMessage {
-  constructor() {
-    this._element = null;
-  }
+export default class NoEventMessage extends AbstractView {
   getTemplate() {
-    return createTripNoEventsMessageTemplate(this._point);
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
+    return createTripNoEventsMessageTemplate();
   }
 }

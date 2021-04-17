@@ -1,4 +1,3 @@
-import {RenderPosition} from './data.js';
 
 // генератор случайных данных
 
@@ -17,19 +16,4 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-// функция отрисовки созданного элемента;
-
-const renderElement = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN : container.prepend(element); break;
-    case RenderPosition.BEFOREEND : container.append(element); break;
-  }
-};
-
-// функция для рендера элементов страницы (потом должна уйти);
-
-const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export {getRandomIntegerNumber, renderTemplate, createElement, renderElement};
+export {getRandomIntegerNumber, createElement};

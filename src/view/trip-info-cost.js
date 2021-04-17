@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils.js';
+import AbstractView from '../mock/abstract.js';
 
 const createTripInfoCostTemplate = () => {
   return `<p class="trip-info__cost">
@@ -6,21 +6,9 @@ const createTripInfoCostTemplate = () => {
 </p>`;
 };
 
-export default class TripPrice {
-  constructor() {
-    this._element = null;
-  }
+export default class TripPrice extends AbstractView {
   getTemplate() {
     return createTripInfoCostTemplate();
-  }
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }
 
