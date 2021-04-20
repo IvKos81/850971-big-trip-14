@@ -148,9 +148,13 @@ export default class TripEventEdit extends AbstractView {
     this._clickHandler = this._clickHandler.bind(this);
   }
 
+  getTemplate() {
+    return createEventEditFormTemplate(this._point);
+  }
+
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(this._point);
   }
 
   _clickHandler(evt) {
@@ -163,10 +167,6 @@ export default class TripEventEdit extends AbstractView {
     this._callback.keyDown();
   }
 
-  getTemplate() {
-    return createEventEditFormTemplate(this._point);
-  }
-
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
@@ -174,7 +174,7 @@ export default class TripEventEdit extends AbstractView {
 
   setClickHandler(callback) {
     this._callback.click = callback;
-    this.getElement().addEventListener('click', this._clickHandler);
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._clickHandler);
   }
 
   setOnEscKeyDownHandler(callback) {

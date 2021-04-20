@@ -1,0 +1,152 @@
+import {RenderPosition} from '../mock/data.js';
+import {renderElement /*replace*/} from '../mock/render.js';
+
+import NoEventMessageView from '../view/no-event-message.js';
+import SortView from '../view/trip-sort.js';
+import TripEventListView from '../view/trip-events-list.js';
+import {updateItem} from '../mock/utils.js';
+// import TripEventView from '../view/trip-events-item.js';
+// import TripEventEditView from '../view/event-edit.js';
+import RoutePointPresenter from './point.js';
+
+export default class Trip {
+  constructor(tripContainer) {
+    this._tripContainer = tripContainer;
+
+    this._routePointPresenter = {};
+
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
+
+    this._sortComponent = new SortView();
+    this._tripEventsListComponent = new TripEventListView();
+    this._noEventMessageComponent = new NoEventMessageView();
+  }
+
+  // инициализация отрисовки
+  init(tripPoints) {
+
+    this._tripPoints = tripPoints.slice();
+    this._renderTripRoute();
+  }
+
+  // метод сброса форм редактирования
+  _handleModeChange() {
+    Object
+      .values(this._routePointPresenter)
+      .forEach((presenter) => presenter.resetView());
+  }
+
+  //метод обновления пункта
+  _handlePointChange(updatedPoint) {
+    this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._routePointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  //метод отрисовки сортировки
+  _renderSort() {
+    renderElement(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+  }
+
+  //метод отрисовки пункта
+  _renderPoint(tripPoint) {
+    // const tripEventComponent = new TripEventView(tripPoint);
+    // const tripEventEditComponent = new TripEventEditView(tripPoint);
+
+    // // функции для замены пункта поездки на форму для редактирования
+
+    // const tripPointToForm = () => {
+    //   replace(tripEventEditComponent, tripEventComponent);
+    // };
+
+    // const formToTripPoint = () => {
+    //   replace( tripEventComponent, tripEventEditComponent);
+    // };
+
+    // // обработчики событий
+
+    // const onEscDown = (evt) => {
+    //   if (evt.key === 'Escape') {
+    //     evt.preventDefault();
+    //     formToTripPoint();
+    //     document.removeEventListener('keydown', onEscDown);
+    //   }
+    // };
+
+    // // замена пункта поездки на форму для редактирования по клику
+
+    // tripEventComponent.setEditClickHandler(() => {
+    //   tripPointToForm();
+    //   document.addEventListener('keydown', onEscDown);
+    // });
+
+    // // замена формы для редактирования на пункт поездки по Save
+
+    // tripEventEditComponent.setFormSubmitHandler(() => {
+    //   formToTripPoint();
+    //   document.removeEventListener('keydown', onEscDown);
+    // });
+
+    // // замена формы для редактирования на пункт поездки по Esc
+
+    // tripEventEditComponent.setOnEscKeyDownHandler(() => {
+    //   formToTripPoint();
+    //   document.removeEventListener('keydown', onEscDown);
+    // });
+
+    // // замена формы для редактирования на пункт поездки по клику на стрелку
+
+    // tripEventEditComponent.setClickHandler(() => {
+    //   formToTripPoint();
+    //   document.removeEventListener('keydown', onEscDown);
+    // });
+
+    // renderElement (this._tripEventsListComponent, tripEventComponent, RenderPosition.BEFOREEND);
+
+    const pointPresenter = new RoutePointPresenter(this._tripEventsListComponent, this._handlePointChange, this._handleModeChange);
+    pointPresenter.init(tripPoint);
+
+    this._routePointPresenter[tripPoint.id] = pointPresenter;
+  }
+
+  // метод отрисовки всего списка пунктов
+  _renderPoints(from, to) {
+    this._tripPoints.slice(from, to).forEach((tripPoint) => this._renderPoint(tripPoint));
+  }
+
+  //метод очистки всего списка пунктов
+  _clearPoints() {
+    Object
+      .values(this._routePointPresenter)
+      .forEach((presenter) => presenter.destroy());
+    this._routePointPresenter = {};
+  }
+
+  //метод отрисовки контейнера для списка пунктов
+  _renderEventsListContainer() {
+    renderElement(this._tripContainer, this._tripEventsListComponent, RenderPosition.BEFOREEND);
+  }
+
+  // метод отрисовки начального сообщения
+  _renderNoPoints() {
+    renderElement(this._tripContainer, this._noEventMessageComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  //метод отрисовки всего маршрута с сортировкой
+  _renderTripRoute() {
+    if (this._tripPoints.length === 0) {
+      this._renderNoPoints();
+      return;
+    }
+
+    //отрисовка сортировки;
+    this._renderSort();
+
+    //отрисовка контейнера списка для пунктов поездки
+    this._renderEventsListContainer();
+
+    // отрисовка пунктов поездки
+    this._renderPoints(0, this._tripPoints.length);
+  }
+}
+

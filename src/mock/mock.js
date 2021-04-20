@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
-
 import {getRandomIntegerNumber} from './utils.js';
 import {mockOffers} from './mockdata.js';
+import {nanoid} from 'nanoid';
 
 
 // генератор типа пункта назначения
@@ -93,6 +93,7 @@ const generateMockRoutePoint = () => {
     },
     price: getRandomIntegerNumber(10, 200),
     isFavourite: generateIsFavourite(),
+    id: nanoid(),
     dateFrom: dateStart,
     dateTo: dateStart.add(getRandomIntegerNumber(60000,1.8E+7),'ms'),
     isFinished: finish,
