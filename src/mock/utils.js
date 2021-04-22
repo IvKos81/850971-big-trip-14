@@ -34,34 +34,34 @@ const updateItem = (items, update) => {
 
 // функция расчета веса для сортировки элемента
 
-const getWeightForSortByPrice = (priceA, priceB) => {
-  if (priceA === priceB) {
-    return 0;
-  }
-  if (priceA > priceB) {
-    return 1;
-  }
-  if (priceA < priceB) {
-    return -1;
-  }
-};
+// const getWeightForSortByPrice = (priceA, priceB) => {
+//   if (priceA === priceB) {
+//     return 0;
+//   }
+//   if (priceA > priceB) {
+//     return 1;
+//   }
+//   if (priceA < priceB) {
+//     return -1;
+//   }
+// };
 
 // функции сортировки пунктов по цене
 
-const sortPointPriceUp = (priceA, priceB) => {
-  const weight = getWeightForSortByPrice(priceA.price, priceB.price);
-  if (weight !== null) {
-    return weight;
-  }
-  return priceA.price - priceB.price;
+const sortPointPriceUp = (pointA, pointB) => {
+  // const weight = getWeightForSortByPrice(pointA.price, pointB.price);
+  // if (weight !== null) {
+  //   return weight;
+  // }
+  return pointA.price - pointB.price;
 };
 
-const sortPointPriceDown = (priceA, priceB) => {
-  const weight = getWeightForSortByPrice(priceA.price, priceB.price);
-  if (weight !== null) {
-    return weight;
-  }
-  return priceB.price - priceA.price;
+const sortPointPriceDown = (pointA, pointB) => {
+  // const weight = getWeightForSortByPrice(pointA.price, pointB.price);
+  // if (weight !== null) {
+  //   return weight;
+  // }
+  return pointB.price - pointA.price;
 };
 
 export {getRandomIntegerNumber, createElement, updateItem,sortPointPriceUp, sortPointPriceDown};

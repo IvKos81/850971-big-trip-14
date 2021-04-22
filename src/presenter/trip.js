@@ -1,10 +1,10 @@
 import {RenderPosition, SortType} from '../mock/data.js';
-import {renderElement /*replace*/} from '../mock/render.js';
+import {renderElement} from '../mock/render.js';
 
 import NoEventMessageView from '../view/no-event-message.js';
 import SortView from '../view/trip-sort.js';
 import TripEventListView from '../view/trip-events-list.js';
-import {updateItem, sortPointPriceUp} from '../mock/utils.js';
+import {updateItem, sortPointPriceDown} from '../mock/utils.js';
 import RoutePointPresenter from './point.js';
 
 export default class Trip {
@@ -58,11 +58,14 @@ export default class Trip {
 
   _sortPoints(sortType) {
     switch(sortType) {
-      case SortType.PRICE: this._tripPoints.sort(sortPointPriceUp); break;
+      case SortType.PRICE: this._tripPoints.sort(sortPointPriceDown); break;
       default: this._tripPoints = this._sourcedTripPoints.slice();
     }
 
-    this._currentSortType = SortType;
+    this._currentSortType = sortType;
+
+    this._clearPoints();
+    this._renderPoints(0, this._tripPoints.length);
   }
 
   //метод отрисовки сортировки
