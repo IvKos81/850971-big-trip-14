@@ -5,8 +5,6 @@ import NoEventMessageView from '../view/no-event-message.js';
 import SortView from '../view/trip-sort.js';
 import TripEventListView from '../view/trip-events-list.js';
 import {updateItem} from '../mock/utils.js';
-// import TripEventView from '../view/trip-events-item.js';
-// import TripEventEditView from '../view/event-edit.js';
 import RoutePointPresenter from './point.js';
 
 export default class Trip {
@@ -50,59 +48,6 @@ export default class Trip {
 
   //метод отрисовки пункта
   _renderPoint(tripPoint) {
-    // const tripEventComponent = new TripEventView(tripPoint);
-    // const tripEventEditComponent = new TripEventEditView(tripPoint);
-
-    // // функции для замены пункта поездки на форму для редактирования
-
-    // const tripPointToForm = () => {
-    //   replace(tripEventEditComponent, tripEventComponent);
-    // };
-
-    // const formToTripPoint = () => {
-    //   replace( tripEventComponent, tripEventEditComponent);
-    // };
-
-    // // обработчики событий
-
-    // const onEscDown = (evt) => {
-    //   if (evt.key === 'Escape') {
-    //     evt.preventDefault();
-    //     formToTripPoint();
-    //     document.removeEventListener('keydown', onEscDown);
-    //   }
-    // };
-
-    // // замена пункта поездки на форму для редактирования по клику
-
-    // tripEventComponent.setEditClickHandler(() => {
-    //   tripPointToForm();
-    //   document.addEventListener('keydown', onEscDown);
-    // });
-
-    // // замена формы для редактирования на пункт поездки по Save
-
-    // tripEventEditComponent.setFormSubmitHandler(() => {
-    //   formToTripPoint();
-    //   document.removeEventListener('keydown', onEscDown);
-    // });
-
-    // // замена формы для редактирования на пункт поездки по Esc
-
-    // tripEventEditComponent.setOnEscKeyDownHandler(() => {
-    //   formToTripPoint();
-    //   document.removeEventListener('keydown', onEscDown);
-    // });
-
-    // // замена формы для редактирования на пункт поездки по клику на стрелку
-
-    // tripEventEditComponent.setClickHandler(() => {
-    //   formToTripPoint();
-    //   document.removeEventListener('keydown', onEscDown);
-    // });
-
-    // renderElement (this._tripEventsListComponent, tripEventComponent, RenderPosition.BEFOREEND);
-
     const pointPresenter = new RoutePointPresenter(this._tripEventsListComponent, this._handlePointChange, this._handleModeChange);
     pointPresenter.init(tripPoint);
 
