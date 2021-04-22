@@ -3,7 +3,7 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-const sortType = {
+const SortType = {
   DAY: 'day',
   EVENT: 'event',
   TIME: 'time',
@@ -11,4 +11,4 @@ const sortType = {
   OFFER: 'offer',
 };
 
-export {RenderPosition, sortType};
+export {RenderPosition, SortType};

@@ -1,10 +1,10 @@
-import {RenderPosition} from '../mock/data.js';
+import {RenderPosition, SortType} from '../mock/data.js';
 import {renderElement /*replace*/} from '../mock/render.js';
 
 import NoEventMessageView from '../view/no-event-message.js';
 import SortView from '../view/trip-sort.js';
 import TripEventListView from '../view/trip-events-list.js';
-import {updateItem} from '../mock/utils.js';
+import {updateItem, sortPointPriceUp} from '../mock/utils.js';
 import RoutePointPresenter from './point.js';
 
 export default class Trip {
@@ -13,8 +13,11 @@ export default class Trip {
 
     this._routePointPresenter = {};
 
+    this._currentSortType = SortType.DAY;
+
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleModeChange.bind(this);
 
     this._sortComponent = new SortView();
     this._tripEventsListComponent = new TripEventListView();
@@ -25,7 +28,18 @@ export default class Trip {
   init(tripPoints) {
 
     this._tripPoints = tripPoints.slice();
+
+    this._sourcedTripPoints = tripPoints.slice();
+
     this._renderTripRoute();
+  }
+
+  // метод сортировки списка пунктов
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortPoints(sortType);
   }
 
   // метод сброса форм редактирования
@@ -38,12 +52,23 @@ export default class Trip {
   //метод обновления пункта
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
     this._routePointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  _sortPoints(sortType) {
+    switch(sortType) {
+      case SortType.PRICE: this._tripPoints.sort(sortPointPriceUp); break;
+      default: this._tripPoints = this._sourcedTripPoints.slice();
+    }
+
+    this._currentSortType = SortType;
   }
 
   //метод отрисовки сортировки
   _renderSort() {
     renderElement(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   //метод отрисовки пункта
