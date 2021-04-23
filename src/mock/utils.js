@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import dayjs from 'dayjs';
 
 // генератор случайных данных
 
@@ -32,36 +34,18 @@ const updateItem = (items, update) => {
   ];
 };
 
-// функция расчета веса для сортировки элемента
-
-// const getWeightForSortByPrice = (priceA, priceB) => {
-//   if (priceA === priceB) {
-//     return 0;
-//   }
-//   if (priceA > priceB) {
-//     return 1;
-//   }
-//   if (priceA < priceB) {
-//     return -1;
-//   }
-// };
-
 // функции сортировки пунктов по цене
 
-const sortPointPriceUp = (pointA, pointB) => {
-  // const weight = getWeightForSortByPrice(pointA.price, pointB.price);
-  // if (weight !== null) {
-  //   return weight;
-  // }
-  return pointA.price - pointB.price;
-};
-
 const sortPointPriceDown = (pointA, pointB) => {
-  // const weight = getWeightForSortByPrice(pointA.price, pointB.price);
-  // if (weight !== null) {
-  //   return weight;
-  // }
   return pointB.price - pointA.price;
 };
 
-export {getRandomIntegerNumber, createElement, updateItem,sortPointPriceUp, sortPointPriceDown};
+// функции сортировки пунктов по длительности события
+
+const sortPointTimeDurationUp = (pointA, pointB) => {
+  const durationA = dayjs(pointA.dateTo, 'ms').diff(pointA.dateFrom, 'ms');
+  const durationB = dayjs(pointB.dateTo, 'ms').diff(pointB.dateFrom, 'ms');
+  return durationB-durationA;
+};
+
+export {getRandomIntegerNumber, createElement, updateItem, sortPointPriceDown, sortPointTimeDurationUp};

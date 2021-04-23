@@ -4,7 +4,7 @@ import {renderElement} from '../mock/render.js';
 import NoEventMessageView from '../view/no-event-message.js';
 import SortView from '../view/trip-sort.js';
 import TripEventListView from '../view/trip-events-list.js';
-import {updateItem, sortPointPriceDown} from '../mock/utils.js';
+import {updateItem, sortPointPriceDown, sortPointTimeDurationUp} from '../mock/utils.js';
 import RoutePointPresenter from './point.js';
 
 export default class Trip {
@@ -17,7 +17,7 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
-    this._handleSortTypeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._sortComponent = new SortView();
     this._tripEventsListComponent = new TripEventListView();
@@ -56,9 +56,12 @@ export default class Trip {
     this._routePointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
+  //метод сортировки пунктов поездки
   _sortPoints(sortType) {
     switch(sortType) {
       case SortType.PRICE: this._tripPoints.sort(sortPointPriceDown); break;
+      case SortType.TIME: this._tripPoints.sort(sortPointTimeDurationUp); break;
+
       default: this._tripPoints = this._sourcedTripPoints.slice();
     }
 
