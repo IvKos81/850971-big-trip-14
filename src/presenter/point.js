@@ -109,7 +109,7 @@ export default class RoutePoint {
 
   // замена формы для редактирования на пункт поездки по Save
   _handleFormSubmit(point) {
-    this.changeData(point);
+    this._changeData(point);
     this._formToTripPoint();
   }
 
