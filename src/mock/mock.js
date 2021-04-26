@@ -84,7 +84,6 @@ const generateMockRoutePoint = () => {
   const routeType = generateMockRouteType();
   const finish = Boolean(getRandomIntegerNumber(0,2));
   const offers = generateMockOffers(mockOffers, routeType);
-  const offersSelected = offers.slice(getRandomIntegerNumber(0, offers.length-1), getRandomIntegerNumber(offers.length-1, offers.length));
 
   return {
     destination: {
@@ -95,7 +94,6 @@ const generateMockRoutePoint = () => {
     offer: {
       type: routeType,
       offers: offers,
-      offersSelected: offersSelected,
     },
     price: getRandomIntegerNumber(10, 200),
     isFavourite: generateIsFavourite(),

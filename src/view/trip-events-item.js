@@ -13,7 +13,8 @@ const createTripEventsItemTemplate = (point) => {
   const eventDurationMinutes = eventDuration - eventDurationHours*60;
 
   const createOffersList = (off) => {
-    const offersList = off.offersSelected.map((offer) => `
+    const selectedOffersList = off.offers.filter((offer) => offer.isSelected);
+    const offersList = selectedOffersList.map((offer) => `
       <li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
