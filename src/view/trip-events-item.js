@@ -1,18 +1,20 @@
 // eslint-disable-next-line no-unused-vars
 import dayjs from 'dayjs';
 import AbstractView from '../mock/abstract.js';
+import {showDurationEvent} from '../mock/utils.js';
 
 const createTripEventsItemTemplate = (point) => {
   const {destination, offer, price, isFavourite, dateFrom, dateTo} = point;
 
-  const active = isFavourite === 1 ? '--active' : '';
+  const active = isFavourite ? 'event__favorite-btn event__favorite-btn--active' : 'event__favorite-btn';
 
   const eventDuration = Math.floor((dateTo - dateFrom)/60000);
   const eventDurationHours = Math.floor(eventDuration/60);
   const eventDurationMinutes = eventDuration - eventDurationHours*60;
 
   const createOffersList = (off) => {
-    const offersList = off.offers.map((offer) => `
+    const selectedOffersList = off.offers.filter((offer) => offer.isSelected);
+    const offersList = selectedOffersList.map((offer) => `
       <li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
@@ -26,7 +28,7 @@ const createTripEventsItemTemplate = (point) => {
   <div class="event">
     <time class="event__date" datetime="${dateFrom}">${dateFrom.format('MMM D')}</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="img/icons/${offer.type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${offer.type} ${destination.name}</h3>
     <div class="event__schedule">
@@ -35,7 +37,7 @@ const createTripEventsItemTemplate = (point) => {
         &mdash;
         <time class="event__end-time" datetime="${dateTo}">${dateTo.format('hh:mm')}</time>
       </p>
-      <p class="event__duration">${eventDurationHours} hours ${eventDurationMinutes} min</p>
+      <p class="event__duration">${showDurationEvent(eventDuration, eventDurationHours, eventDurationMinutes)}</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${price}</span>
@@ -62,10 +64,17 @@ export default class TripEvent extends AbstractView {
     super();
     this._point = point;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
   }
   getTemplate() {
     return createTripEventsItemTemplate(this._point);
   }
+
+  _favouriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favouriteClick();
+  }
+
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.editClick();
@@ -74,5 +83,10 @@ export default class TripEvent extends AbstractView {
   setEditClickHandler(callback) {
     this._callback.editClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
+  }
+
+  setFavouriteClickHandler(callback) {
+    this._callback.favouriteClick = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favouriteClickHandler);
   }
 }
