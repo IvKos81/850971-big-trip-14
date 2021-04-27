@@ -19,7 +19,7 @@ export default class Trip {
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._sortComponent = new SortView();
+    this._sortComponent = new SortView(this._currentSortType);
     this._tripEventsListComponent = new TripEventListView();
     this._noEventMessageComponent = new NoEventMessageView();
   }
@@ -40,6 +40,9 @@ export default class Trip {
       return;
     }
     this._sortPoints(sortType);
+    this._clearPoints();
+    this._renderPoints(0, this._tripPoints.length);
+
   }
 
   // метод сброса форм редактирования
@@ -61,18 +64,15 @@ export default class Trip {
     switch(sortType) {
       case SortType.PRICE: this._tripPoints.sort(sortPointPriceDown); break;
       case SortType.TIME: this._tripPoints.sort(sortPointTimeDurationUp); break;
-
       default: this._tripPoints = this._sourcedTripPoints.slice();
     }
 
     this._currentSortType = sortType;
-
-    this._clearPoints();
-    this._renderPoints(0, this._tripPoints.length);
   }
 
   //метод отрисовки сортировки
   _renderSort() {
+
     renderElement(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
