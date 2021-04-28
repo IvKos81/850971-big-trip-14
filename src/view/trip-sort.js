@@ -43,12 +43,10 @@ export default class Sort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
-    console.log(evt);
     if (!evt.target.classList.contains('trip-sort__input')) {
       return;
     }
 
-    //evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
