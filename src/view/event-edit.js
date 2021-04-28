@@ -6,11 +6,11 @@ const createEventEditFormTemplate = (point) => {
   const {destination, offer, price, dateFrom, dateTo} = point;
 
   const createOffersList = (off) => {
-    const offersList = off.offers.map((offer) => `
 
+    const offersList = off.offers.map((offer) =>`
     <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.type}-1" type="checkbox" name="event-offer-${offer.type}">
-            <label class="event__offer-label" for="event-offer-${offer.type}-1">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-${off.type}-${offer.id}" type="checkbox" name="event-offer-${off.type}" ${offer.isSelected ? 'checked': ''}>
+            <label class="event__offer-label" for="event-offer-${off.type}-${offer.id}">
               <span class="event__offer-title">${offer.title}</span>
               &plus;&euro;&nbsp;
               <span class="event__offer-price">${offer.price}</span>
@@ -26,7 +26,7 @@ const createEventEditFormTemplate = (point) => {
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
           <span class="visually-hidden">Choose event type</span>
-          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+          <img class="event__type-icon" width="17" height="17" src="img/icons/${offer.type}.png" alt="Event type icon">
         </label>
         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 

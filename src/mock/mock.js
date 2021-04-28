@@ -64,7 +64,10 @@ const generateMockOffers = (array, typePoint) => {
 // генератор выбора звездочки
 
 const generateIsFavourite = () => {
-  return getRandomIntegerNumber(0,1);
+  switch(getRandomIntegerNumber(0,1)) {
+    case 0: return false;
+    case 1: return true;
+  }
 };
 
 //генератор даты
@@ -80,6 +83,7 @@ const generateMockRoutePoint = () => {
   const dateStart = generateMockDateFrom();
   const routeType = generateMockRouteType();
   const finish = Boolean(getRandomIntegerNumber(0,2));
+  const offers = generateMockOffers(mockOffers, routeType);
 
   return {
     destination: {
@@ -89,7 +93,7 @@ const generateMockRoutePoint = () => {
     },
     offer: {
       type: routeType,
-      offers: generateMockOffers(mockOffers, routeType),
+      offers: offers,
     },
     price: getRandomIntegerNumber(10, 200),
     isFavourite: generateIsFavourite(),
