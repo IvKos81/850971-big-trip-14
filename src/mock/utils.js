@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import dayjs from 'dayjs';
 
 // генератор случайных данных
 
@@ -41,4 +43,19 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {getRandomIntegerNumber, showDurationEvent, createElement, updateItem};
+// функции сортировки пунктов по цене
+
+const sortPointPriceDown = (pointA, pointB) => {
+  return pointB.price - pointA.price;
+};
+
+// функции сортировки пунктов по длительности события
+
+const sortPointTimeDurationUp = (pointA, pointB) => {
+  const durationA = dayjs(pointA.dateTo, 'ms').diff(pointA.dateFrom, 'ms');
+  const durationB = dayjs(pointB.dateTo, 'ms').diff(pointB.dateFrom, 'ms');
+  return durationB-durationA;
+};
+
+export {getRandomIntegerNumber, createElement, updateItem, sortPointPriceDown, sortPointTimeDurationUp};
+

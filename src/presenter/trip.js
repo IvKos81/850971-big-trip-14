@@ -1,10 +1,10 @@
-import {RenderPosition} from '../mock/data.js';
-import {renderElement /*replace*/} from '../mock/render.js';
+import {RenderPosition, SortType} from '../mock/data.js';
+import {renderElement} from '../mock/render.js';
 
 import NoEventMessageView from '../view/no-event-message.js';
 import SortView from '../view/trip-sort.js';
 import TripEventListView from '../view/trip-events-list.js';
-import {updateItem} from '../mock/utils.js';
+import {updateItem, sortPointPriceDown, sortPointTimeDurationUp} from '../mock/utils.js';
 import RoutePointPresenter from './point.js';
 
 export default class Trip {
@@ -13,10 +13,13 @@ export default class Trip {
 
     this._routePointPresenter = {};
 
+    this._currentSortType = SortType.DAY;
+
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
-    this._sortComponent = new SortView();
+    this._sortComponent = new SortView(this._currentSortType);
     this._tripEventsListComponent = new TripEventListView();
     this._noEventMessageComponent = new NoEventMessageView();
   }
@@ -25,7 +28,21 @@ export default class Trip {
   init(tripPoints) {
 
     this._tripPoints = tripPoints.slice();
+
+    this._sourcedTripPoints = tripPoints.slice();
+
     this._renderTripRoute();
+  }
+
+  // метод сортировки списка пунктов
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+    this._sortPoints(sortType);
+    this._clearPoints();
+    this._renderPoints(0, this._tripPoints.length);
+
   }
 
   // метод сброса форм редактирования
@@ -38,12 +55,26 @@ export default class Trip {
   //метод обновления пункта
   _handlePointChange(updatedPoint) {
     this._tripPoints = updateItem(this._tripPoints, updatedPoint);
+    this._sourcedTripPoints = updateItem(this._sourcedTripPoints, updatedPoint);
     this._routePointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  //метод сортировки пунктов поездки
+  _sortPoints(sortType) {
+    switch(sortType) {
+      case SortType.PRICE: this._tripPoints.sort(sortPointPriceDown); break;
+      case SortType.TIME: this._tripPoints.sort(sortPointTimeDurationUp); break;
+      default: this._tripPoints = this._sourcedTripPoints.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
   //метод отрисовки сортировки
   _renderSort() {
+
     renderElement(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   //метод отрисовки пункта
